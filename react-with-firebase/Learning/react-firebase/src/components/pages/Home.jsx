@@ -1,15 +1,16 @@
-import { getAuth, signOut } from "firebase/auth";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useFirebase } from '../../context/firebase';
 
 const HomePage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const email = location.state?.email || "No Email";
 
-  const handleLogout = async () => {
-    const auth = getAuth();
+  const firebase = useFirebase();
+
+  const Logout = async () => {
     try {
-      await signOut(auth);
+      await firebase.handleLogout();
       console.log("User logged out successfully");
       navigate("/");
     } catch (error) {
@@ -22,7 +23,7 @@ const HomePage = () => {
       <div>
         <h1 className="text-2xl">Welcome, {email}!</h1>
         <div className='card'>
-        <button onClick={() => handleLogout()}>
+        <button onClick={() => Logout()}>
           LogOut
         </button>
       </div>
