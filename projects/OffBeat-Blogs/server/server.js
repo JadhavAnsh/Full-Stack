@@ -3,24 +3,59 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const authRouter = require("./routes/authRoute.js");
+const userRouter = require("./routes/userRoutes.js");
+const blogRouter = require("./routes/blogRoutes.js");
 
 dotenv.config();
 
 const app = express();
-app.use(express.json());
 
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
 
-const port = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-// MongoDB connection
-mongoose
+function startServer() {
+  try {
+    // connecting to mongoDB Database
+    mongoose
   .connect(process.env.MONG_URI)
-  .then(() => console.log("MongoDB connected!, DataBase name: " + mongoose.connection.db.databaseName))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .then(() => {
+    console.log("MongoDB connected!, DataBase name: " + mongoose.connection.db.databaseName)
+  })
+  .then(() => {
+    // middlewares
+    app.use(express.json())
+  })
+  .then(() => {
+    // routes
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+    // Welcome route
+    app.get("/", (req, res) => {
+      res.send("Welcome to Offbeat Blogs API")
+    })
+
+    // auth routes
+    app.use('/api/v1/auth', authRouter);
+
+    // user routes
+    app.use('/api/v1/users', userRouter);
+
+    // blog routes
+    app.use('/api/v1/blogs', blogRouter);
+  })
+  .then(() => {
+    // listening to port
+    app.listen(PORT, () => {
+      console.log(`Server is running on port http://localhost:${PORT}`);
+    });
+  });
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+}
+
+startServer()
