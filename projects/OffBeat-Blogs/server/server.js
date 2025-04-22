@@ -1,11 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cookiePraser = require("cookie-praser")
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const authRouter = require("./routes/authRoute.js");
 const userRouter = require("./routes/userRoutes.js");
 const blogRouter = require("./routes/blogRoutes.js");
+const errorMiddleware = require("./middlewares/errorMiddleware.js");
 
 dotenv.config();
 
@@ -27,7 +29,10 @@ function startServer() {
   })
   .then(() => {
     // middlewares
-    app.use(express.json())
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+    app.use(cookiePraser());
+    app.use(errorMiddleware);
   })
   .then(() => {
     // routes
