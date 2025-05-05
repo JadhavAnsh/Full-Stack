@@ -1,13 +1,13 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const cookiePraser = require("cookie-praser")
+const cookiePraser = require("cookie-parser")
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const authRouter = require("./routes/authRoute.js");
-const userRouter = require("./routes/userRoutes.js");
-const blogRouter = require("./routes/blogRoutes.js");
-const errorMiddleware = require("./middlewares/errorMiddleware.js");
+const authRouter = require("./routes/auth.routes.js");
+const userRouter = require("./routes/user.routes.js");
+const blogRouter = require("./routes/blog.routes.js");
+const errorMiddleware = require("./middlewares/error.middleware.js");
 
 dotenv.config();
 
