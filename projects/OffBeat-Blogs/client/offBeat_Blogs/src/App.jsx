@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <NavBar />
-      <h1 className='text-4xl'>App</h1>
+      <h1 className='text-4xl mt-10'>App</h1>
     </>
   )
 }
